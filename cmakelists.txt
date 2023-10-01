@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.21)
+set(CMAKE_CXX_STANDARD 20)
+project(npcap_wrapper)
+
+set(NPCAP_SDK_DIR "npcap_sdk/")
+include_directories(${NPCAP_SDK_DIR}/Include)
+link_directories(${NPCAP_SDK_DIR}/Lib/x64)
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+add_executable(tunnel src/tunnel.cpp)
+add_executable(print_interfaces src/print_interfaces.cpp)
+add_executable(send src/send.cpp)
+add_executable(listen src/listen.cpp)
+
+target_link_libraries(tunnel Packet wpcap)
+target_link_libraries(print_interfaces Packet wpcap)
+target_link_libraries(send Packet wpcap)
+target_link_libraries(listen Packet wpcap)

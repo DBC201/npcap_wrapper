@@ -25,6 +25,13 @@ int main()
 
 	std::cout << "Enter the interface id:";
 	std::cin >> i;
+
+	if (i > interface_names.size() || i < 1) {
+		std::cout << "Invalid interface id" << std::endl;
+		system("pause");
+		return 0;
+	}
+
 	interface = interface_map[interface_names[i - 1]];
 
 	npcapWrapper.listen_interface(

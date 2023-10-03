@@ -32,6 +32,12 @@ int main()
 	std::cin >> i;
 	interface = interface_map[interface_names[i - 1]];
 
+	if (i > interface_names.size() || i < 1) {
+		std::cout << "Invalid interface id" << std::endl;
+		system("pause");
+		return 0;
+	}
+
 	pcap_t *handle = npcapWrapper.open_live_interface(interface);
 	std::string message = "Hello World";
 

@@ -1,38 +1,37 @@
 #include "npcap_wrapper.h"
-using npcap_wrapper::NpcapWrapper;
 
 int main()
 {
+	std::string interface;
 
-	NpcapWrapper npcapWrapper;
+	npcap_wrapper::NpcapWrapper npcap_wrapper;
 
-	npcapWrapper.update_interfaces();
+	npcap_wrapper.update_interfaces();
+	std::unordered_map<std::string, std::string> interface_map = npcap_wrapper.get_interface_names();
+	std::vector<std::string> interface_names(interface_map.size());
 
-	std::unordered_map<std::string, std::string> interfaces = npcapWrapper.get_interface_names();
+	std::cout << "Detected Interfaces: " << std::endl
+			  << std::endl;
+	std::cout << "id | interface" << std::endl;
+	int i = 1;
+	for (auto const &[key, val] : interface_map)
+	{
+		std::cout << i << " | " << key << std::endl;
+		interface_names[i - 1] = key;
+		i++;
+	}
 
-	int count = 0;
+	std::cout << std::endl;
+
+	std::cout << "Enter the interface id:";
+	std::cin >> i;
+	interface = interface_map[interface_names[i - 1]];
 
 	npcapWrapper.listen_interface(
-		interfaces.at(""), [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
+		interface, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
 		{
-			int *count = (int *)user;
-			std::cout << *count << ": ";
-			(*count)++;
-			std::cout << "Received a packet with length: " << pkthdr->len << " bytes" << std::endl;
-			// Print the packet content as ASCII characters
-			for (int i = 0; i < pkthdr->len; i++) {
-				if (isprint(packet[i])) {
-					std::cout << packet[i];
-				} else {
-					std::cout << '.';
-				}
-
-				if ((i + 1) % 80 == 0) {
-					std::cout << std::endl;
-				}
-			}
-        	std::cout << std::endl; 
+			npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet);
 		},
-		(u_char*)(&count));
+		nullptr);
 	return 0;
 }

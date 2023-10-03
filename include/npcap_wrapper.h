@@ -145,6 +145,41 @@ namespace npcap_wrapper
 			}
 		}
 
+		/**
+		 * @brief Won't print packet content if packet is nullptr.
+		 * 
+		 * @param pkthdr 
+		 * @param packet 
+		 */
+		static void print_packet(const struct pcap_pkthdr *pkthdr, const unsigned char *packet) {
+			std::cout << "--------------------------------------------" << std::endl;
+			std::cout << "Received a packet with length: " << pkthdr->len << " bytes" << std::endl;
+			if (packet != nullptr) {
+				// Print the packet content as ASCII characters
+				for (int i = 0; i < pkthdr->len; i++)
+				{
+					if (isprint(packet[i]))
+					{
+						std::cout << packet[i];
+					}
+					else
+					{
+						std::cout << '.';
+					}
+
+					if ((i + 1) % 80 == 0)
+					{
+						std::cout << std::endl;
+					}
+				}
+				std::cout << std::endl;
+			}
+		}
+
+		static void close(pcap_t *handle) {
+			pcap_close(handle);
+		}
+
 	private:
 		char errbuf[PCAP_ERRBUF_SIZE];
 		std::unordered_map<std::string, std::string> m_interface_names;

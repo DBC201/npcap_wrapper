@@ -7,7 +7,7 @@
 
 int main()
 {
-	std::string interface;
+	std::string interface_name;
 
 	npcap_wrapper::NpcapWrapper npcap_wrapper;
 
@@ -30,15 +30,16 @@ int main()
 
 	std::cout << "Enter the interface id:";
 	std::cin >> i;
-	interface = interface_map[interface_names[i - 1]];
 
 	if (i > interface_names.size() || i < 1) {
 		std::cout << "Invalid interface id" << std::endl;
 		system("pause");
 		return 0;
 	}
+	
+	interface_name = interface_map[interface_names[i - 1]];
 
-	pcap_t *handle = npcapWrapper.open_live_interface(interface);
+	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name);
 	std::string message = "Hello World";
 
 	while (1)

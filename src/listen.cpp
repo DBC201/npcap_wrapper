@@ -2,7 +2,7 @@
 
 int main()
 {
-	std::string interface;
+	std::string interface_name;
 
 	npcap_wrapper::NpcapWrapper npcap_wrapper;
 
@@ -32,10 +32,10 @@ int main()
 		return 0;
 	}
 
-	interface = interface_map[interface_names[i - 1]];
+	interface_name = interface_map[interface_names[i - 1]];
 
-	npcapWrapper.listen_interface(
-		interface, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
+	npcap_wrapper.listen_interface(
+		interface_name, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
 		{
 			npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet);
 		},

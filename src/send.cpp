@@ -39,7 +39,7 @@ int main()
 	
 	interface_name = interface_map[interface_names[i - 1]];
 
-	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name);
+	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name, 1);
 	std::string message = "Hello World";
 
 	while (1)

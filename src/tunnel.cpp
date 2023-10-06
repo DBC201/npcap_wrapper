@@ -47,7 +47,7 @@ int main() {
 	destination_interface = interface_map[interface_names[i - 1]];
 
 	std::cout << "Tunneling " << source_interface << " to " << destination_interface << std::endl;
-	npcap_wrapper.tunnel(source_interface, destination_interface);
+	npcap_wrapper.tunnel(source_interface, destination_interface, 0);
 
 	return 0;
 }

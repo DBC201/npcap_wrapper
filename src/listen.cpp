@@ -39,6 +39,6 @@ int main()
 		{
 			npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet);
 		},
-		nullptr);
+		nullptr, 1);
 	return 0;
 }

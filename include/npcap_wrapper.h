@@ -23,11 +23,12 @@ namespace npcap_wrapper
 		 * @param interface_name
 		 * @param packet_handler void callback(unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet);
 		 * @param param
+		 * @param promiscious_mode 1 to enable, 0 to disable
 		 */
-		void listen_interface(std::string interface_name, pcap_handler packet_handler, u_char *param)
+		void listen_interface(std::string interface_name, pcap_handler packet_handler, u_char *param, int promiscious_mode)
 		{
 			const char *m_interface_name = interface_name.c_str();
-			pcap_t *handle = open_live_interface(m_interface_name);
+			pcap_t *handle = open_live_interface(m_interface_name, promiscious_mode);
 			if (handle == nullptr)
 			{
 				throw std::runtime_error("Error opening interface " + interface_name + ": " + std::string(errbuf));
@@ -41,7 +42,14 @@ namespace npcap_wrapper
 			pcap_close(handle);
 		}
 
-		pcap_t *open_live_interface(std::string interface_name)
+		/**
+		 * @brief 
+		 * 
+		 * @param interface_name 
+		 * @param promiscious_mode 1 to enable, 0 to disable
+		 * @return pcap_t* 
+		 */
+		pcap_t *open_live_interface(std::string interface_name, int promiscious_mode)
 		{
 			const char *m_interface_name = interface_name.c_str();
 			pcap_t *handle = pcap_create(m_interface_name, errbuf);
@@ -60,7 +68,7 @@ namespace npcap_wrapper
 				throw std::runtime_error("Error setting snaplen for " + interface_name + ": " + std::string(pcap_geterr(handle)));
 			}
 
-			if (pcap_set_promisc(handle, 1) != 0)
+			if (pcap_set_promisc(handle, promiscious_mode) != 0)
 			{
 				throw std::runtime_error("Error setting promiscuous mode for " + interface_name + ": " + std::string(pcap_geterr(handle)));
 			}
@@ -73,11 +81,18 @@ namespace npcap_wrapper
 			return handle;
 		}
 
-		void tunnel(std::string source_inteface_name, std::string destination_interface_name)
+		/**
+		 * @brief 
+		 * 
+		 * @param source_inteface_name 
+		 * @param destination_interface_name 
+		 * @param promiscious_mode 1 to enable, 0 to disable
+		 */
+		void tunnel(std::string source_inteface_name, std::string destination_interface_name, int promiscious_mode)
 		{
-			pcap_t *source_handle = open_live_interface(source_inteface_name);
+			pcap_t *source_handle = open_live_interface(source_inteface_name, promiscious_mode);
 
-			pcap_t *dest_handle = open_live_interface(destination_interface_name);
+			pcap_t *dest_handle = open_live_interface(destination_interface_name, promiscious_mode);
 
 			if (pcap_loop(source_handle, 0, NpcapWrapper::tunnel_packet_handler, (u_char *)dest_handle) < 0)
 			{

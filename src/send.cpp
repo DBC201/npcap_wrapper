@@ -45,8 +45,8 @@ int main()
 	while (1)
 	{
 		npcap_wrapper::NpcapWrapper::send_packet(handle, (u_char *)message.c_str(), sizeof(message));
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		std::cout << "Packet sent!" << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	return 0;

@@ -34,11 +34,18 @@ int main()
 
 	interface_name = interface_map[interface_names[i - 1]];
 
+	char promiscious_flag;
+
+	do {
+		std::cout << "Enable promisciuos mode? (y/n):";
+		std::cin >> promiscious_flag;
+	} while (promiscious_flag != 'y' && promiscious_flag != 'n');
+
 	npcap_wrapper.listen_interface(
 		interface_name, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
 		{
 			npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet);
 		},
-		nullptr, 1);
+		nullptr, promiscious_flag == 'y' ? 1 : 0);
 	return 0;
 }

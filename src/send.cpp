@@ -39,7 +39,14 @@ int main()
 	
 	interface_name = interface_map[interface_names[i - 1]];
 
-	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name, 1);
+	char promiscious_flag;
+
+	do {
+		std::cout << "Enable promisciuos mode? (y/n):";
+		std::cin >> promiscious_flag;
+	} while (promiscious_flag != 'y' && promiscious_flag != 'n');
+
+	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name, promiscious_flag == 'y' ? 1 : 0);
 	std::string message = "Hello World";
 
 	while (1)

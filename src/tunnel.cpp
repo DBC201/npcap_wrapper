@@ -43,11 +43,17 @@ int main() {
 		return 0;
 	}
 
-
 	destination_interface = interface_map[interface_names[i - 1]];
 
+	char promiscious_flag;
+
+	do {
+		std::cout << "Enable promisciuos mode? (y/n):";
+		std::cin >> promiscious_flag;
+	} while (promiscious_flag != 'y' && promiscious_flag != 'n');
+
 	std::cout << "Tunneling " << source_interface << " to " << destination_interface << std::endl;
-	npcap_wrapper.tunnel(source_interface, destination_interface, 0);
+	npcap_wrapper.tunnel(source_interface, destination_interface, promiscious_flag == 'y' ? 1 : 0);
 
 	return 0;
 }

@@ -12,11 +12,11 @@ int main()
 
 	std::cout << "Detected Interfaces: " << std::endl
 			  << std::endl;
-	std::cout << "id | interface" << std::endl;
+	std::cout << "id | description | interface" << std::endl;
 	int i = 1;
 	for (auto const &[key, val] : interface_map)
 	{
-		std::cout << i << " | " << key << std::endl;
+		std::cout << i << " | " << key << " | " << val << std::endl;
 		interface_names[i - 1] = key;
 		i++;
 	}

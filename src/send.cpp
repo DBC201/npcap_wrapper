@@ -17,7 +17,7 @@ int main()
 
 	std::cout << "Detected Interfaces: " << std::endl
 			  << std::endl;
-	std::cout << "id | description | interface" << std::endl;
+	std::cout << "id | interface | description" << std::endl;
 	int i = 1;
 	for (auto const &[key, val] : interface_map)
 	{
@@ -37,7 +37,7 @@ int main()
 		return 0;
 	}
 	
-	interface_name = interface_map[interface_names[i - 1]];
+	interface_name = interface_names[i - 1];
 
 	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name, 0);
 	std::string message = "Hello World";

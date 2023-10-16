@@ -12,7 +12,7 @@ int main() {
 
 	std::cout << "Detected Interfaces: " << std::endl
 			  << std::endl;
-	std::cout << "id | description | interface" << std::endl;
+	std::cout << "id | interface | description" << std::endl;
 	int i = 1;
 	for (auto const &[key, val] : interface_map)
 	{
@@ -32,7 +32,7 @@ int main() {
 		return 0;
 	}
 
-	source_interface = interface_map[interface_names[i - 1]];
+	source_interface = interface_names[i - 1];
 
 	std::cout << "Enter the destination interface id:";
 	std::cin >> i;
@@ -43,7 +43,7 @@ int main() {
 		return 0;
 	}
 
-	destination_interface = interface_map[interface_names[i - 1]];
+	destination_interface = interface_names[i - 1];
 
 	char promiscious_flag;
 

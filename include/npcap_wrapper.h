@@ -110,7 +110,7 @@ namespace npcap_wrapper
 		 * @note
 		 * Will return an empty map if update_interfaces() is not called.
 		 * 
-		 * @return std::unordered_map<std::string, std::string> {interface_description, interface_name}
+		 * @return std::unordered_map<std::string, std::string> {interface_name, interface_description}
 		 */
 		std::unordered_map<std::string, std::string> get_interface_names()
 		{
@@ -146,7 +146,7 @@ namespace npcap_wrapper
 
 			for (pcap_if_t *dev = interfaces; dev != nullptr; dev = dev->next)
 			{
-				m_interface_names.insert({dev->description, dev->name});
+				m_interface_names.insert({dev->name, dev->description});
 			}
 
 			pcap_freealldevs(interfaces);

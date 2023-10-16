@@ -12,7 +12,7 @@ int main()
 
 	std::cout << "Detected Interfaces: " << std::endl
 			  << std::endl;
-	std::cout << "id | description | interface" << std::endl;
+	std::cout << "id | interface | description" << std::endl;
 	int i = 1;
 	for (auto const &[key, val] : interface_map)
 	{
@@ -26,26 +26,32 @@ int main()
 	std::cout << "Enter the interface id:";
 	std::cin >> i;
 
-	if (i > interface_names.size() || i < 1) {
+	if (i > interface_names.size() || i < 1)
+	{
 		std::cout << "Invalid interface id" << std::endl;
 		system("pause");
 		return 0;
 	}
 
-	interface_name = interface_map[interface_names[i - 1]];
+	interface_name = interface_names[i - 1];
 
 	char promiscious_flag;
 
-	do {
+	do
+	{
 		std::cout << "Enable promisciuos mode? (y/n):";
 		std::cin >> promiscious_flag;
 	} while (promiscious_flag != 'y' && promiscious_flag != 'n');
 
-	npcap_wrapper.listen_interface(
-		interface_name, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
-		{
-			npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet);
-		},
-		nullptr, promiscious_flag == 'y' ? 1 : 0);
+	try
+	{
+		npcap_wrapper.listen_interface(
+			interface_name, [](unsigned char *user, const struct pcap_pkthdr *pkthdr, const unsigned char *packet)
+			{ npcap_wrapper::NpcapWrapper::print_packet(pkthdr, packet); },
+			nullptr, promiscious_flag == 'y' ? 1 : 0);
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
+
 	return 0;
 }

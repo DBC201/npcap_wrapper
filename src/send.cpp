@@ -51,13 +51,13 @@ int main()
 	while (1)
 	{
 		// demo values
-		ByteArray src_mac = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55}; 
-    	ByteArray dst_mac = {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
+		ByteArray src_mac = {0xD8, 0x5E, 0xD3, 0x83, 0x5C, 0x15}; 
+    	ByteArray dst_mac = {0x50, 0xA0, 0x30, 0x0A, 0xE6, 0x04};
 
 		uint16_t etherType = 0x0800; // IPv4
 
 		EthernetPacket *packet = create_ethernet_packet(src_mac, dst_mac, (unsigned char *)message.c_str(), message.size(), etherType);
-		npcap_wrapper::NpcapWrapper::send_packet(handle, (u_char *)packet, sizeof(message));
+		npcap_wrapper::NpcapWrapper::send_packet(handle, (u_char *)packet, sizeof(packet));
 		std::cout << "Packet sent!" << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		delete packet;

@@ -1,9 +1,14 @@
 #include <iostream>
 #include <pcap.h>
 #include <npcap_wrapper.h>
+#include <ethernet_packet.h>
 
 #include <chrono>
 #include <thread>
+
+using npcap_wrapper::ethernet_packet::create_ethernet_packet;
+using npcap_wrapper::ethernet_packet::EthernetPacket;
+using npcap_wrapper::ethernet_packet::ByteArray;
 
 int main()
 {
@@ -45,9 +50,17 @@ int main()
 
 	while (1)
 	{
-		npcap_wrapper::NpcapWrapper::send_packet(handle, (u_char *)message.c_str(), sizeof(message));
+		// demo values
+		ByteArray src_mac = {0xD8, 0x5E, 0xD3, 0x83, 0x5C, 0x15}; 
+    	ByteArray dst_mac = {0x50, 0xA0, 0x30, 0x0A, 0xE6, 0x04};
+
+		uint16_t etherType = 0x0800; // IPv4
+
+		EthernetPacket *packet = create_ethernet_packet(src_mac, dst_mac, (unsigned char *)message.c_str(), message.size(), etherType);
+		npcap_wrapper::NpcapWrapper::send_packet(handle, (u_char *)packet, sizeof(packet));
 		std::cout << "Packet sent!" << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		delete packet;
 	}
 
 	return 0;

@@ -48,8 +48,6 @@ int main()
 	pcap_t *handle = npcap_wrapper.open_live_interface(interface_name, 0);
 	std::string message = "Hello World";
 
-	std::cout << pcap_datalink(handle) << std::endl;
-
 	while (1)
 	{
 		// demo values

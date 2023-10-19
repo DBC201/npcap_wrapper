@@ -81,6 +81,21 @@ namespace npcap_wrapper
 			return handle;
 		}
 
+		pcap_t* open_live_interface(std::string interface_name, int promiscious_mode, std::string filter) {
+			struct bpf_program fp;
+			pcap_t* handle = open_live_interface(interface_name, promiscious_mode);
+
+			if (pcap_compile(handle, &fp, filter.c_str(), 0, PCAP_NETMASK_UNKNOWN) == -1) {
+				throw std::runtime_error("Error compiling filter: " + std::string(pcap_geterr(handle)));
+			}
+
+			if (pcap_setfilter(handle, &fp) == -1) {
+				throw std::runtime_error("Error setting filter: " + std::string(pcap_geterr(handle)));
+			}
+
+			return handle;
+		}
+
 		/**
 		 * @brief 
 		 * 
